@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
 import { useStateValue } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 import { IoLogoInstagram, IoLogoTwitter } from "react-icons/io5";
@@ -9,25 +8,35 @@ import { getAllArtist } from "../api";
 import { actionType } from "../context/reducer";
 
 const DashboardArtist = () => {
-  const [{ allArtists }, dispatch] = useStateValue();
+  const [{ artists }, dispatch] = useStateValue();
 
   useEffect(() => {
-    if (!allArtists) {
-      getAllArtist().then((data) => {
-        dispatch({ type: actionType.SET_ALL_ARTISTS, allArtists: data.data });
-      });
+    console.log("DashboardArtist component mounted");
+    if (!artists) {
+      console.log("Fetching artists...");
+      getAllArtist()
+        .then((data) => {
+          console.log("Artists fetched:", data);
+          dispatch({ type: actionType.SET_ARTISTS, artists: data.data });
+        })
+        .catch((error) => {
+          console.error("Failed to fetch artists:", error);
+        });
+    } else {
+      console.log("Artists already available:", artists);
     }
-  }, []);
+  }, [artists, dispatch]);
 
   return (
     <div className="w-full p-4 flex items-center justify-center flex-col">
-      <div className="relative w-full gap-3  my-4 p-4 py-12 border border-gray-300 rounded-md flex flex-wrap justify-evenly">
-        {allArtists &&
-          allArtists.map((data, index) => (
-            <>
-              <ArtistCard key={index} data={data} index={index} />
-            </>
-          ))}
+      <div className="relative w-full gap-3 my-4 p-4 py-12 border border-gray-300 rounded-md flex flex-wrap justify-evenly">
+        {artists && artists.length > 0 ? (
+          artists.map((data, index) => (
+            <ArtistCard key={index} data={data} index={index} />
+          ))
+        ) : (
+          <p>No artists found</p>
+        )}
       </div>
     </div>
   );
@@ -45,17 +54,16 @@ export const ArtistCard = ({ data, index }) => {
       <img
         src={data?.imageURL}
         className="w-full h-40 object-cover rounded-md"
-        alt=""
+        alt={data.name}
       />
-
       <p className="text-base text-textColor">{data.name}</p>
       <div className="flex items-center gap-4">
-        <a href={data.instagram} target="_blank">
+        <a href={data.instagram} target="_blank" rel="noopener noreferrer">
           <motion.i whileTap={{ scale: 0.75 }}>
             <IoLogoInstagram className="text-gray-500 hover:text-headingColor text-xl" />
           </motion.i>
         </a>
-        <a href={data.twitter} target="_blank">
+        <a href={data.twitter} target="_blank" rel="noopener noreferrer">
           <motion.i whileTap={{ scale: 0.75 }}>
             <IoLogoTwitter className="text-gray-500 hover:text-headingColor text-xl" />
           </motion.i>
@@ -66,7 +74,7 @@ export const ArtistCard = ({ data, index }) => {
         whileTap={{ scale: 0.75 }}
         onClick={() => setIsDelete(true)}
       >
-        <MdDelete className=" text-gray-400 hover:text-red-400 text-xl cursor-pointer" />
+        <MdDelete className="text-gray-400 hover:text-red-400 text-xl cursor-pointer" />
       </motion.i>
 
       {isDelete && (
@@ -74,7 +82,7 @@ export const ArtistCard = ({ data, index }) => {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.5 }}
-          className="absolute inset-0 p-2 bg-darkOverlay  backdrop-blur-md flex flex-col items-center justify-center gap-4"
+          className="absolute inset-0 p-2 bg-darkOverlay backdrop-blur-md flex flex-col items-center justify-center gap-4"
         >
           <p className="text-gray-100 text-base text-center">
             Are you sure do you want to delete this?
@@ -97,6 +105,7 @@ export const ArtistCard = ({ data, index }) => {
 };
 
 export default DashboardArtist;
+
 
 // import React, { useState } from "react";
 // import { motion } from "framer-motion";
@@ -178,9 +187,3 @@ export default DashboardArtist;
 // };
 
 // export default ArtistCard;
-
-
-
-
-
-

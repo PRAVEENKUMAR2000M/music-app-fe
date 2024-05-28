@@ -8,6 +8,7 @@ export const validateUser = async (token) => {
     const res = await axios.get(`${baseURL}api/users/login`, {
       headers: {
         Authorization: "Bearer " + token,
+
       },
     });
     return res.data;

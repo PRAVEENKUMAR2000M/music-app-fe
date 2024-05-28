@@ -6,12 +6,12 @@ import { Dashboard, Home, Login, MusicPlayer } from "./components";
 // import { Login } from '../src/components/Login'
 // import { MusicPlayer } from "../src/components/MusicPlayer";
 import React, { useEffect, useState } from "react";
-import { app } from "./config/firebase.config";
+import { app } from "../src/config/firebase.config";
 import { getAuth } from "firebase/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { validateUser } from "./api";
-import { useStateValue } from "./context/StateProvider";
-import { actionType } from "./context/reducer";
+import { useStateValue } from "../src/context/StateProvider";
+import { actionType } from "../src/context/reducer";
 
 function App() {
   const firebaseAuth = getAuth(app);

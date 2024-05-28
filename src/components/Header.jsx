@@ -97,7 +97,7 @@ const Header = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="absolute z-10 top-12 right-0 w-275 p-3 gap-2 bg-card shadow-lg rounded-lg backdrop-blur-sm flex flex-col"
+            className="absolute z-10 top-10 right-0 w-275 p-3 gap-2 bg-card shadow-lg rounded-lg backdrop-blur-sm flex flex-col"
           >
             <NavLink to={"/userProfile"}>
               <p className="text-base text-textColor hover:font-semibold duration-150 transition-all ease-in-out">

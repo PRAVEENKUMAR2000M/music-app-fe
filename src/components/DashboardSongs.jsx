@@ -53,9 +53,8 @@ const DashboardSongs = () => {
         <input
           type="text"
           placeholder="Search here"
-          className={`w-52 px-4 py-2 border ${
-            isFocus ? "border-gray-500 shadow-md" : "border-gray-300"
-          } rounded-md bg-transparent outline-none duration-150 transition-all ease-in-out text-base text-textColor font-semibold`}
+          className={`w-52 px-4 py-2 border ${isFocus ? "border-gray-500 shadow-md" : "border-gray-300"
+            } rounded-md bg-transparent outline-none duration-150 transition-all ease-in-out text-base text-textColor font-semibold`}
           value={songFilter}
           onChange={(e) => setSongFilter(e.target.value)}
           onBlur={() => setIsFocus(false)}
@@ -129,7 +128,7 @@ export const SongCard = ({ data, index }) => {
   const deleteObject = (id) => {
     console.log(id);
     deleteSongById(id).then((res) => {
-      // console.log(res.data);
+      console.log(res.data);
       if (res.data.success) {
         setAlert("success");
         setAlertMsg(res.data.msg);
@@ -192,13 +191,12 @@ export const SongCard = ({ data, index }) => {
         <motion.img
           whileHover={{ scale: 1.05 }}
           src={data.imageURL}
-          referrerPolicy="no referrer"
           alt=""
           className=" w-full h-full rounded-lg object-cover"
         />
       </div>
 
-      <p className="text-base text-center text-headingColor font-semibold my-2">
+      <p className="text-base text-headingColor font-semibold my-2">
         {data.name.length > 25 ? `${data.name.slice(0, 25)}` : data.name}
         <span className="block text-sm text-gray-400 my-1">{data.artist}</span>
       </p>

@@ -1,30 +1,37 @@
 import React, { useEffect } from "react";
-import { auth } from "../config/firebase.config";
+import { app } from "../config/firebase.config";
 import { FcGoogle } from "react-icons/fc";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../context/StateProvider";
 import { validateUser } from "../api";
 import { actionType } from "../context/reducer";
-import LoginBg from "../assets/video/Login.jpg";
+import { LoginBg } from "../assets/video";
 
 const Login = ({ setAuth }) => {
+  const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
+
   const navigate = useNavigate();
+
   const [{ user }, dispatch] = useStateValue();
 
   const loginWithGoogle = async () => {
     try {
-      const userCred = await signInWithPopup(auth, provider);
+      const userCred = await signInWithPopup(firebaseAuth, provider);
       if (userCred) {
         setAuth(true);
         window.localStorage.setItem("auth", "true");
-        const token = await userCred.user.getIdToken();
+
+        const user = userCred.user;
+        const token = await user.getIdToken();
+
         const data = await validateUser(token);
         dispatch({
           type: actionType.SET_USER,
           user: data,
         });
+
         navigate("/", { replace: true });
       }
     } catch (error) {
@@ -34,6 +41,7 @@ const Login = ({ setAuth }) => {
         type: actionType.SET_USER,
         user: null,
       });
+      navigate("/login");
     }
   };
 
@@ -47,17 +55,21 @@ const Login = ({ setAuth }) => {
     <div className="relative w-screen h-screen">
       <img
         src={LoginBg}
-        alt="Login Background"
+        type="img/png"
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-darkOverlay flex items-center justify-center p-4">
-        <div className="w-full md:w-375 p-4 bg-lightOverlay shadow-2xl rounded-md backdrop-blur-md flex flex-col items-center justify-center">
+        <div
+          className="w-full md:w-375 p-4 bg-lightOverlay shadow-2xl rounded-md backdrop-blur-md 
+        flex flex-col items-center justify-center"
+        >
           <div
             onClick={loginWithGoogle}
-            className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-cardOverlay cursor-pointer hover:bg-card hover:shadow-md duration-100 ease-in-out transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-2 rounded-md 
+          bg-cardOverlay cursor-pointer hover:bg-card hover:shadow-md duration-100 ease-in-out transition-all"
           >
             <FcGoogle />
-            Sign in with Google
+            Sign in Google
           </div>
         </div>
       </div>
