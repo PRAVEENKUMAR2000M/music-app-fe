@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const baseURL = "https://music-app-be-1.onrender.com/";
-// const baseURL = "http://localhost:3001/";
+// const baseURL = "https://music-app-be-1.onrender.com/";
+const baseURL = "http://localhost:3001/";
 
 export const validateUser = async (token) => {
   try {
